@@ -1,0 +1,174 @@
+<html>
+	<head>
+		<script src="jquery.min.js"></script>
+		<script src="raphael-min.js"></script>
+		<script src="kartograph-0.8.1.min.js"></script>
+    </head>
+	<body>
+
+	<h1>IP2Location&trade; World SVG Map</h1>
+	<script type="text/javascript">
+		var zoom_factor = 1;
+		var oldpath = null;
+		var oldpath_color = "#d7f2d0";
+					
+		$(document).ready(function() {
+			//load svg map
+			loadsvgmap(660,368);
+			
+			//zoom in feature
+			$("#zoomin").click(function(){
+				//increase zoom factor
+				zoom_factor += 1;
+				if (zoom_factor > 4){
+					//maximum reached
+					zoom_factor = 4;
+				}
+				else{
+					//reload svg map with new zoom factor
+					loadsvgmap(660*zoom_factor, 368*zoom_factor);
+				}
+			});
+			
+			//zoom out feature
+			$("#zoomout").click(function(){
+				//increase zoom factor
+				zoom_factor -= 1;
+				if (zoom_factor < 1){
+					//minimum reached
+					zoom_factor = 1;
+				}
+				else{
+					//reload svg map with new zoom factor
+					loadsvgmap(660*zoom_factor, 368*zoom_factor);
+				}
+			});
+			
+			//svg map loading function
+			function loadsvgmap(map_width, map_height){
+				//clear the map before loading
+				$('#map').html('');
+				
+				map = $K.map('#map', map_width, map_height);
+				map.loadMap('world_border.svg', function() {
+					map.addLayer('world_border', {
+						styles: {
+							fill: '#d7f2d0',
+							'stroke-width': 0.5
+						},
+						title: function(d) {
+							return d.countryName;
+						}
+					});
+					
+					map.getLayer('world_border').style('fill', function(data) {
+						if (data.iso == "US")
+							return "#053400";
+						else if (data.iso == "CN")
+							return "#054700";
+						else if (data.iso == "GB")
+							return "#0a8300";
+						else if (data.iso == "JP")
+							return "#0da401";
+						else if (data.iso == "KR")
+							return "#2cb01c";
+						else if (data.iso == "DE")
+							return "#41ba2f";
+						else if (data.iso == "FR")
+							return "#78d261";
+						else if (data.iso == "CA")
+							return "#87d773";
+						else if (data.iso == "IT")
+							return "#a9e29a";
+						else if (data.iso == "AU")
+							return "#c2ebb8";
+						else
+							return "#d7f2d0";
+					});
+					
+					map.getLayer('world_border')
+					.on('click', function(data, path, event) {
+						$("#info").html('<span style="font-size:1.5em;font-weight:bold;">You have selected:</span> \
+						<br/><span style="font-size:1.2em">Country Code: ' + data.iso + '</span>');
+						
+						//revert the previous selection
+						if (oldpath){
+							oldpath.attr('fill', oldpath_color);
+						}
+						
+						//record the previous color for revert purpose
+						oldpath = path;
+						oldpath_color = path.attr('fill');
+						
+						//fill selection color	
+						path.attr('fill', 'blue');
+					});
+				});
+			}
+		});
+		
+    </script>
+	<div>
+		<input id="zoomin" type="button" value="zoom in"  /> &nbsp;
+		<input id="zoomout" type="button" value="zoom out"  />
+	</div>
+	<div style="width:680px; height:370px; overflow:auto;">
+		<div id="map"></div>
+    </div>
+    <span><strong>Top 10 IP Address Ownership by Country in 2011. Source: <a href="http://www.ip2location.com/reports/internet-ip-address-2012-report">Internet IP Address 2012 Report</a></strong></span>
+    <div style="width:660px">
+		<div style="float:left; margin-top:10px; margin-left:20px; width:400px;">
+			<table cellpadding="0" cellspacing="0">
+				<tr>
+					<td style="background-color:#053400; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">UNITED STATES (34.4662%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#054700; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">CHINA (11.1670%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#0a8300; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">UNITED KINGDOM (7.7272%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#0da401; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">JAPAN (6.9404%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#2cb01c; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">KOREA REPUBLIC OF (3.8830%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#41ba2f; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">GERMANY (3.4851%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#78d261; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">FRANCE (3.1848%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#87d773; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">CANADA (2.2622%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#a9e29a; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">ITALY (1.7078%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#c2ebb8; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">AUSTRALIA (1.6861%)</td>
+				</tr>
+				<tr>
+					<td style="background-color:#d7f2d0; padding:5px 10px;">&nbsp;</td>
+					<td style="padding:5px;">OTHER COUNTRIES (23.4902%)</td>
+				</tr>
+			</table>
+		</div>
+		<div style="float:right; width:200px;">
+			<div id="info" style="margin-top:10px;"></div>
+		</div>
+		<div style="clear:both;"></div>
+    </div>
+    </body>
+</html>
