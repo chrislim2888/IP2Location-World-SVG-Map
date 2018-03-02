@@ -6,7 +6,7 @@ The SVG map can be very useful in many area, for example, to color the countries
 Below we demonstratre you on how to color the world SVG map with gradient based on the IP address ownernship year 2011. You may take a look at http://www.ip2location.com/reports/internet-ip-address-2012-report for details of ownership report.
 
 For more details, please visit:
-http://www.ip2location.com/free/world-svg-map
+https://www.ip2location.com/free/world-svg-map
 
 
 How to run the sample
@@ -20,4 +20,4 @@ Notes: The sample use kartograph.js for the SVG display. You may want to check k
 Support
 -------
 Email: support@ip2location.com.
-Website: http://www.ip2location.com
+Website: https://www.ip2location.com
